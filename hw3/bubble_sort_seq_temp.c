@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 16
+#define N 100000
 
 void swap(int *xp, int *yp) {
   int temp = *xp;
@@ -64,11 +64,21 @@ int* merge(int *a, int *b, int size) {
 	return m;
 }
 
-int* mergeN(int *a, int size, int n) {
+// int* mergeN(int *a, int size, int n) {
+// 	if (n > 2) {
+// 		return merge(mergeN(a, size / 2, n / 2), mergeN(a + size / 2, size / 2, n / 2), size);
+// 	}
+// 	return merge(a, &a[size/2], size);
+// }
+
+int* mergeN(int *a[], int size, int n) {
 	if (n > 2) {
-		return merge(mergeN(a, size / 2, n / 2), mergeN(a + size / 2, size / 2, n / 2), size);
+		return merge(mergeN(a, size / 2, n / 2), mergeN(a + n/2, size / 2, n / 2), size);
 	}
-	return merge(a, &a[size/2], size);
+	else if (n == 1) {
+		return a[0];
+	}
+	return merge(a[0], a[1], size);
 }
 
 int main(int argc, char** argv) {
@@ -78,28 +88,39 @@ int main(int argc, char** argv) {
 	double elapsed_time, t1, t2;
 
 	MPI_Init(NULL, NULL);
+	int world_rank, world_size;
+	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	
+	n = world_size;
+	int chunkSize = N / world_size;
+	int start_index = world_rank * chunkSize;
 
 	t1 = MPI_Wtime();
-	A = (int *)malloc(sizeof(int)*N);
+	A = (int *)malloc(sizeof(int)*chunkSize);
 	temp = (int *)malloc(sizeof(int)*N);
 	if (A == NULL) {
 		printf("Fail to malloc\n");
 		exit(1);
 	}
-	for (i=N-1; i>=0; i--)
-		A[N-1-i] = i;
+	for (i=chunkSize-1; i>=0; i--)
+		A[chunkSize-1-i] = i + start_index;
 	
-	if (isSorted(A, N))
+	if (isSorted(A, chunkSize))
 	  printf("Array is sorted\n");
 	else
 	  printf("Array is NOT sorted\n");
 	
-
-	n = 4;
-	for (i = 0; i < n; i++) {
-		bubbleSort(&A[N/n*i], N/n);
-		printArray(&A[N/n*i], N/n);
-	}
+	
+	bubbleSort(A, chunkSize);
+	// printArray(A, chunkSize);
+	
+	// MPI_Send(A, chunkSize, MPI_INT, world_rank, 0, MPI_COMM_WORLD);
+	// n = 4;
+	// for (i = 0; i < n; i++) {
+	// 	bubbleSort(&A[N/n*i], N/n);
+	// 	printArray(&A[N/n*i], N/n);
+	// }
 	// bubbleSort(A, N/2);
 	// printArray(A, N/2);
 	
@@ -107,24 +128,60 @@ int main(int argc, char** argv) {
 	// printArray(&A[N/2],N-N/2);
 
 	// int *m = merge(A, &A[N/2], N);
-	printf("================================\n");
+
 	// int *m = merge(&A[N/2], A, N);
-	int *m = mergeN(A, N, n);
+	if (world_rank == 0) {
+		// temp[i]
+		// int rank;
+		// for (rank = 1; rank < world_size; rank++) {
+			// int* rev = (int *)malloc(sizeof(int)*chunkSize);
+			// MPI_Recv(rev, chunkSize, MPI_INT, rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		// }
+		
+		
+		int rank;
+		int *partial[n];
+		printArray(A, chunkSize);
+		partial[0] = A;
+		for (rank = 1; rank < world_size; rank++) {
+			int x = 1;
+			MPI_Send(&x, 1, MPI_INT, rank, 0, MPI_COMM_WORLD);
+			int* rev = (int *)malloc(sizeof(int)*chunkSize);
+			MPI_Recv(rev, chunkSize, MPI_INT, rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			printArray(rev, chunkSize);
+			partial[rank] = rev;
+		}
+	    
+		// int *m = mergeN(temp, chunkSize, n);	      
+		temp = mergeN(partial, N, n);	      
+	    // }
+
+
 	// mergeN(A, N, 2);
 	// printArray(A, N);
 	
-	printArray(m, N);
+	// printArray(m, chunkSize);
 
-	printf("================================\n");
 
-	if (isSorted(m, N))
-	// if (isSorted(A, N))
-	  printf("Array is sorted\n");
-	else
-	  printf("Array is NOT sorted\n");	
+		if (isSorted(temp, N))
+		// if (isSorted(A, N))
+		  printf("Array is sorted\n");
+		else
+		  printf("Array is NOT sorted\n");	
+
+		t2 = MPI_Wtime();
+		printf( "Elapsed time MPI_Wtime is %f\n", t2 - t1 ); 
+		printArray(temp, N);
+	}
+	else if (world_rank != 0) {
+		// printf("G____G\n");
+		int y;
+
+		MPI_Recv(&y, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Send(A, chunkSize, MPI_INT, 0, 0, MPI_COMM_WORLD);
+	}
+
 	
-	t2 = MPI_Wtime();
-	printf( "Elapsed time MPI_Wtime is %f\n", t2 - t1 ); 
 	
 
 
