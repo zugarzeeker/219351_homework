@@ -37,7 +37,7 @@ void printArray(int arr[], int size)
   printf("\n");
 }
 
-int* merge(int *a, int *b, int size) {
+int* pairMerge(int *a, int *b, int size) {
 	int *m = (int *)malloc(sizeof(int)*size);
 	int i = 0, j = 0;
 
@@ -62,14 +62,14 @@ int* merge(int *a, int *b, int size) {
 	return m;
 }
 
-int* mergeN(int *a[], int size, int n) {
+int* multiMerge(int *a[], int size, int n) {
 	if (n > 2) {
-		return merge(mergeN(a, size / 2, n / 2), mergeN(a + n/2, size / 2, n / 2), size);
+		return pairMerge(multiMerge(a, size / 2, n / 2), multiMerge(a + n/2, size / 2, n / 2), size);
 	}
 	else if (n == 1) {
 		return a[0];
 	}
-	return merge(a[0], a[1], size);
+	return pairMerge(a[0], a[1], size);
 }
 
 int main(int argc, char** argv) {
@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
 			partial[rank] = rev;
 		}
 
-		temp = mergeN(partial, N, n);	      
+		temp = multiMerge(partial, N, n);	      
 
 		if (isSorted(temp, N))
 		  printf("Array is sorted\n");
