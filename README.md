@@ -41,6 +41,16 @@ Homework 6
  - **4.** - for every given node, how many nodes contains links to it
  - **5.** - for every given node, say X, a list of nodes that X can reach in two links
 
+References
+----------
+- [Message Passing](http://nartra.blogspot.com/2014/10/parallel-mpi-1-mpi.html)
+- [Intro NoSQL](http://www.somkiat.cc/introduction-to-nosql-at-kmitl/)
+- [Hadoop Ecosystem](https://thanachart.org/2014/10/18/hadoop-ecosystem-%E0%B8%AA%E0%B8%B3%E0%B8%AB%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%9E%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B8%B2-big-data/)
+- [BigData + Hadoop](http://www.siamhtml.com/getting-started-with-big-data-and-hadoop-spark-on-cloud-dataproc/)
+- [01219351 WebAppDev](https://www.cpe.ku.ac.th/~paruj/219351)
+
+
+
 Member
 ---
 Fullname | StudentID
