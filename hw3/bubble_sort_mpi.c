@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 16
+#define N 100000
 
 void swap(int *xp, int *yp) {
   int temp = *xp;
@@ -107,12 +107,12 @@ int main(int argc, char** argv) {
 	if (world_rank == 0) {
 		int rank;
 		int *partial[n];
-		printArray(A, chunkSize);
+		printArray(A, 5);
 		partial[0] = A;
 		for (rank = 1; rank < world_size; rank++) {
 			int* rev = (int *)malloc(sizeof(int)*chunkSize);
 			MPI_Recv(rev, chunkSize, MPI_INT, rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			printArray(rev, chunkSize);
+			printArray(rev, 5);
 			partial[rank] = rev;
 		}
 
@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
 
 		t2 = MPI_Wtime();
 		printf( "Elapsed time MPI_Wtime is %f\n", t2 - t1 ); 
-		printArray(temp, N);
+		//printArray(temp, N);
 	}
 	else if (world_rank != 0) {
 		MPI_Send(A, chunkSize, MPI_INT, 0, 0, MPI_COMM_WORLD);
