@@ -11,22 +11,29 @@ Homework 3
 ---------
 Message Passing Programming with C (bubblesort MPI)
 
-Complie
+**Complie**
 ```bash
 mpicc bubble_sort_mpi.c -o bubble
 ```
-Execute with np = 2
+**Execute with np = 2**
 ```bash
 mpiexec -np 2 ./bubble 
 ```
-Execute withnp = 4
+**Execute with np = 4**
 ```bash
 mpiexec -np 4 ./bubble 
 ```
 
 Homework 5
 ---------
-Sequential vs MapReduce
+Sequential vs MapReduce (Use [web-Google.txt](https://snap.stanford.edu/data/web-Google.html) as the input file)
+
+**Problems**
+
+ - **5. Sequential** - for every given node, how many nodes contains links to it
+ - **6. MapReduce** - for every given node, how many nodes contains links to it
+ - **7. Sequential** - for every given node, say X, a list of nodes that X can reach in two links
+ - **8. MapReduce** - for every given node, say X, a list of nodes that X can reach in two links 
 
 Homework 6
 ---------
