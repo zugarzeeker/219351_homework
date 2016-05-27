@@ -24,6 +24,14 @@ mpiexec -np 2 ./bubble
 mpiexec -np 4 ./bubble 
 ```
 
+**Result**
+
+np | Elapsed time (sec)
+------------ | -------------
+2 | 8.947105
+4 | 4.040553
+8 | 2.019532
+
 Homework 5
 ---------
 Sequential vs MapReduce (Use [web-Google.txt](https://snap.stanford.edu/data/web-Google.html) as the input file)
