@@ -51,13 +51,13 @@ References
 
 
 
-Member
+Member Group 7 
 ---
 Fullname | StudentID
 ------------ | -------------
 Supanut Apikulvanich | 5610501016
 Aphichan Chaiyuttasart | 5610502888
-Manatsawin Hanmongkolchai | -
-Nut Kaewnak | -
-Piyaphat Tulakoop | -
+Manatsawin Hanmongkolchai | 5610545757
+Nut Kaewnak | 5610545676
+Piyaphat Tulakoop | 5610545731
 
