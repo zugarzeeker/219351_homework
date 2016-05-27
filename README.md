@@ -45,6 +45,7 @@ Sequential vs MapReduce (Use [web-Google.txt](https://snap.stanford.edu/data/web
 
 **Note**
  - **Problem 7** - very slow execute because sequential programming **`O(n^3)`**
+ - **MapReduce** - good programming practice for think and code with **faster** performance
 
 Homework 6
 ---------
